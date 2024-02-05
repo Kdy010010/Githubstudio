@@ -1,0 +1,10 @@
+# _config.yml
+
+title: GitHub Studio
+theme: minima # 또는 원하는 테마
+
+collections:
+  posts:
+    output: true
+
+permalink: /:title/
