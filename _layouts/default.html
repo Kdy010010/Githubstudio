@@ -1,0 +1,88 @@
+---
+layout: default
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles.css">
+  <title>{{ page.title | default: site.title }}</title>
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="{{ site.baseurl }}/index.html">Home</a></li>
+      <li><a href="{{ site.baseurl }}/documentation/">Documentation</a></li>
+      <li><a href="{{ site.baseurl }}/writing/">Write Document</a></li>
+      <li><a href="{{ site.baseurl }}/search/">Search</a></li>
+    </ul>
+  </nav>
+
+  <div id="content-container" class="documentation-container">
+    <!-- 내용이 동적으로 변경될 부분 -->
+  </div>
+
+  {{ content | markdownify }}
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.12.0/fuse.min.js"></script>
+  <script>
+    // 페이지 로드 시 기본 페이지 표시
+    document.addEventListener('DOMContentLoaded', function () {
+      showDefaultPage();
+    });
+
+    // 검색 함수 정의
+    function performSearch() {
+      var query = document.getElementById('searchInput').value;
+      var results = fuse.search(query);
+
+      // 검색 결과를 표시할 컨테이너
+      var searchResultsContainer = document.getElementById('searchResults');
+      searchResultsContainer.innerHTML = '';
+
+      // 검색 결과 처리 및 표시 로직 추가
+      results.forEach(function (result) {
+        var link = document.createElement('a');
+        link.href = '{{ site.baseurl }}' + result.item.url;
+        link.textContent = result.item.title;
+
+        // 클릭 이벤트에 Markdown 내용을 표시하는 함수 연결
+        link.addEventListener('click', function () {
+          showMarkdownContent('{{ site.baseurl }}' + result.item.url);
+        });
+
+        var listItem = document.createElement('li');
+        listItem.appendChild(link);
+
+        searchResultsContainer.appendChild(listItem);
+      });
+    }
+
+    // Markdown 내용을 표시하는 함수
+    function showMarkdownContent(url) {
+      var contentContainer = document.getElementById('content-container');
+      contentContainer.innerHTML = '';
+
+      var iframe = document.createElement('iframe');
+      iframe.src = '{{ site.baseurl }}/iframe_viewer.html?url=' + encodeURIComponent(url);
+
+      contentContainer.appendChild(iframe);
+    }
+
+    // 기본 페이지 표시 함수
+    function showDefaultPage() {
+      var contentContainer = document.getElementById('content-container');
+      contentContainer.innerHTML = '';
+
+      // 기본적으로 문서 목록 페이지를 표시
+      var iframe = document.createElement('iframe');
+      iframe.src = '{{ site.baseurl }}/document_list.html';
+
+      contentContainer.appendChild(iframe);
+    }
+  </script>
+</body>
+</html>
