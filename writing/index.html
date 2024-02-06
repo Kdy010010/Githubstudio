@@ -1,0 +1,14 @@
+---
+layout: default
+---
+
+<div class="form-container">
+  <h1>Write a Document</h1>
+  <form action="{{ site.baseurl }}/submit_document/" method="post">
+    <label for="documentTitle">Document Title:</label>
+    <input type="text" id="documentTitle" name="documentTitle" required>
+    <label for="documentContent">Document Content:</label>
+    <textarea id="documentContent" name="documentContent" rows="8" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</div>
